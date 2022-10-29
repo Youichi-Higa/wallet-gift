@@ -1,2 +1,2 @@
-export * from './GiveButton'
-export * from './PickUpButton'
+export * from './GiveButton';
+export * from './PickUpButton';

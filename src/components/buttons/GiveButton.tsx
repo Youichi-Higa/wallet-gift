@@ -1,4 +1,6 @@
 import { Button } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { path } from 'src/const';
 
 type Props = {
   buttonText: string;
@@ -7,8 +9,17 @@ type Props = {
 export const GiveButton = (props: Props) => {
   const { buttonText } = props;
 
+  const navigate = useNavigate();
+  const goToForm = () => navigate(path.form);
+
   return (
-    <Button background="#FF6F6F" _hover={{ bg: '#ff9999' }} color="white" sx={{ width: '255px' }}>
+    <Button
+      bg="#FF6F6F"
+      _hover={{ bg: '#ff9999' }}
+      color="white"
+      sx={{ width: '255px' }}
+      onClick={goToForm}
+    >
       {buttonText}
     </Button>
   );
