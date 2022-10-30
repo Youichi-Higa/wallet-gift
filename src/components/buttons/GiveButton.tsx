@@ -17,7 +17,7 @@ export const GiveButton = (props: Props) => {
       bg="#FF6F6F"
       _hover={{ bg: '#ff9999' }}
       color="white"
-      sx={{ width: '255px' }}
+      sx={{ width: '100%' }}
       onClick={goToForm}
     >
       {buttonText}

@@ -1,5 +1,5 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { GiveButton, PickUpButton } from './buttons';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import { GiveButton, PickUpButton } from 'src/components/buttons';
 
 type Props = {
   title: string;
@@ -28,11 +28,14 @@ export const Card = (props: Props) => {
       <Text fontSize="lg" mb={10}>
         {text}
       </Text>
-      {title === 'Wallet を持っている方' ? (
-        <GiveButton buttonText={buttonText} />
-      ) : (
-        <PickUpButton buttonText={buttonText} />
-      )}
+
+      <Box w="255px">
+        {title === 'Wallet を持っている方' ? (
+          <GiveButton buttonText={buttonText} />
+        ) : (
+          <PickUpButton buttonText={buttonText} />
+        )}
+      </Box>
     </Flex>
   );
 };

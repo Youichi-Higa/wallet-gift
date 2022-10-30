@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react';
-import { Card } from '../Card';
+import { Card } from 'src/components/Card';
 
 export const Top = () => {
   return (

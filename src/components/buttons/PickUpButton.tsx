@@ -17,7 +17,7 @@ export const PickUpButton = (props: Props) => {
       bg="#392C6F"
       _hover={{ bg: '#4c456d' }}
       color="white"
-      sx={{ width: '255px' }}
+      sx={{ width: '100%' }}
       onClick={goToChoice}
     >
       {buttonText}
