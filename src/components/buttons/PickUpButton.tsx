@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { path } from 'src/const';
+import { paths } from 'src/const';
 
 type Props = {
   buttonText: string;
@@ -10,7 +10,7 @@ export const PickUpButton = (props: Props) => {
   const { buttonText } = props;
 
   const navigate = useNavigate();
-  const goToChoice = () => navigate(path.choice);
+  const goToChoice = () => navigate(paths.choice);
 
   return (
     <Button

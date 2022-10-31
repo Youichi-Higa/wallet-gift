@@ -1,4 +1,4 @@
-export const path = {
+export const paths = {
   top: "/",
   form: "/form",
   choice: "/choice"
