@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Divider,
@@ -13,18 +15,13 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
 import { BackButton, NextButton } from 'src/components/buttons';
-
-type FormValues = {
-  network: string;
-  walletAddress: string;
-  secretKey: string;
-  publicDate: string;
-  publicType: string;
-};
+import { paths } from 'src/const/paths';
+import type { FormValues } from 'src/types/FormValues';
 
 export const Form = () => {
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     register,
@@ -45,15 +42,21 @@ export const Form = () => {
   // 未来日が選択されているか(boolean)
   const isFutureDate = (date: string) => new Date(date) > new Date();
 
-  // ボタン押下時の処理
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  // 「確認画面へ」ボタン押下時の処理
+  const onSubmit = (formValues: FormValues) => {
+    console.log(formValues);
+
+    // フォーム入力値を持って、確認画面に遷移
+    navigate(paths.confirmation, { state: formValues });
   };
+
+  // 「もどる」ボタン押下時の処理
+  const goBack = () => navigate(-1);
 
   return (
     <Box w="700px" mx="auto" py={10}>
       {/* タイトル */}
-      <Heading as="h1" size="xl" mb={12} noOfLines={1} textAlign="center">
+      <Heading as="h1" sx={{ fontSize: '32px' }} mb={12} noOfLines={1} textAlign="center">
         Walletをあげる
       </Heading>
 
@@ -61,16 +64,18 @@ export const Form = () => {
         {/* グレーのフォーム入力エリア */}
         <Box bg="gray.50" mb={12} borderRadius={10}>
           <Box py="40px" px="50px">
-            <Heading as="h2" size="lg" mb={2} noOfLines={1}>
+            <Heading as="h2" sx={{ fontSize: '24px' }} mb={2} noOfLines={1}>
               Wallet情報の入力
             </Heading>
-            <Text fontSize="lg" mb={6}>
+            <Text fontSize="lg" color="black" mb={6}>
               ご自身の不要なWalletの情報をご入力ください
             </Text>
 
             {/* ネットワーク入力欄 */}
             <FormControl mb={6} isInvalid={typeof errors?.network?.message === 'string'}>
-              <FormLabel htmlFor="network">NetWork</FormLabel>
+              <FormLabel htmlFor="network" color="gray.700">
+                NetWork
+              </FormLabel>
               <Select
                 id="network"
                 {...register('network', {
@@ -89,7 +94,9 @@ export const Form = () => {
 
             {/* ウォレットアドレス入力欄 */}
             <FormControl mb={6} isInvalid={typeof errors?.walletAddress?.message === 'string'}>
-              <FormLabel htmlFor="walletAddress">Wallet address</FormLabel>
+              <FormLabel htmlFor="walletAddress" color="gray.700">
+                Wallet address
+              </FormLabel>
               <Input
                 id="walletAddress"
                 type="text"
@@ -118,7 +125,9 @@ export const Form = () => {
 
             {/* 秘密鍵入力欄 */}
             <FormControl mb={6} isInvalid={typeof errors?.secretKey?.message === 'string'}>
-              <FormLabel htmlFor="secretKey">秘密鍵</FormLabel>
+              <FormLabel htmlFor="secretKey" color="gray.700">
+                秘密鍵
+              </FormLabel>
               <Input
                 id="secretKey"
                 type="text"
@@ -135,10 +144,10 @@ export const Form = () => {
 
             <Divider mb={6} />
 
-            <Heading as="h2" size="lg" mb={2} noOfLines={1}>
+            <Heading as="h2" sx={{ fontSize: '24px' }} mb={2} noOfLines={1}>
               公開日の設定
             </Heading>
-            <Text fontSize="lg" mb={6}>
+            <Text fontSize="md" color="black" mb={6}>
               Wallet情報を公開する日付を設定してください。
             </Text>
 
@@ -159,7 +168,9 @@ export const Form = () => {
             {/* 未来日の設定 */}
             {isFuture && (
               <FormControl isInvalid={typeof errors?.publicDate?.message === 'string'}>
-                <FormLabel htmlFor="publicDate">Wallet情報の公開日</FormLabel>
+                <FormLabel htmlFor="publicDate" color="gray.700">
+                  Wallet情報の公開日
+                </FormLabel>
                 <Input
                   id="publicDate"
                   type="date"
@@ -183,7 +194,7 @@ export const Form = () => {
         {/* ボタン */}
         <HStack spacing="12px" justify="center">
           <Box w="200px">
-            <BackButton buttonText="もどる" onClick={() => console.log('もどる')} />
+            <BackButton buttonText="もどる" onClick={goBack} />
           </Box>
           <Box w="200px">
             <NextButton buttonText="確認画面へ" />

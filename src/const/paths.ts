@@ -1,5 +1,6 @@
 export const paths = {
-  top: "/",
-  form: "/form",
-  choice: "/choice"
-}
+  top: '/',
+  form: '/form',
+  confirmation: '/confirmation',
+  choice: '/choice',
+};

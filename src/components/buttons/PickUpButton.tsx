@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { paths } from 'src/const';
+import { paths } from 'src/const/paths';
 
 type Props = {
   buttonText: string;
