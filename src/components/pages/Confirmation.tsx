@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Checkbox, Divider, Heading, HStack, Text } from '@chakra-ui/react';
 import { BackButton, NextButton } from 'src/components/buttons';
+import { paths } from 'src/const/paths';
 import type { FormValues } from 'src/types/FormValues';
 
 export const Confirmation = () => {
@@ -13,6 +14,10 @@ export const Confirmation = () => {
   const [notesChecked, setNotesChecked] = useState<boolean>(false);
   const handleCheckBox = () => setNotesChecked(!notesChecked);
 
+  // 「送信」ボタン押下時の処理
+  const onSubmit = () => {
+    navigate(paths.complete);
+  };
   // 「もどる」ボタン押下時の処理
   const goBack = () => navigate(-1);
 
@@ -85,7 +90,7 @@ export const Confirmation = () => {
             borderColor="red.300"
             borderRadius="lg"
           >
-            <Checkbox color="black" isChecked={false} onChange={handleCheckBox}>
+            <Checkbox color="black" isChecked={notesChecked} onChange={handleCheckBox}>
               リスクについて理解した
             </Checkbox>
           </Box>
@@ -102,7 +107,7 @@ export const Confirmation = () => {
           <BackButton buttonText="もどる" onClick={goBack} />
         </Box>
         <Box w="200px">
-          <NextButton buttonText="送信" disabled={!notesChecked} />
+          <NextButton buttonText="送信" onClick={onSubmit} disabled={!notesChecked} />
         </Box>
       </HStack>
     </Box>
