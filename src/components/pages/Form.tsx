@@ -65,7 +65,7 @@ export const Form = () => {
               Wallet情報の入力
             </Heading>
             <Text fontSize="lg" mb={6}>
-              ご自身のWalletの情報をご入力ください
+              ご自身の不要なWalletの情報をご入力ください
             </Text>
 
             {/* ネットワーク入力欄 */}
@@ -79,10 +79,11 @@ export const Form = () => {
                 placeholder="選択してください"
               >
                 {networks.map((network) => (
-                  <option value={network}>{network}</option>
+                  <option key={network} value={network}>
+                    {network}
+                  </option>
                 ))}
               </Select>
-              <FormHelperText> 対応NetWork：ここに書く</FormHelperText>
               <FormErrorMessage> {errors.network && errors.network.message}</FormErrorMessage>
             </FormControl>
 
@@ -95,9 +96,21 @@ export const Form = () => {
                 placeholder="0xE94f1fa4F27D9d288FFeA234bB62E1fBC086CA0c"
                 {...register('walletAddress', {
                   required: '必須です',
+                  minLength: {
+                    value: 42,
+                    message: '42桁で入力してください',
+                  },
+                  maxLength: {
+                    value: 42,
+                    message: '42桁で入力してください',
+                  },
+                  pattern: {
+                    value: /^0x.+/,
+                    message: '先頭は「0x」にしてください',
+                  },
                 })}
               />
-              <FormHelperText>お間違えのないようご注意ください。</FormHelperText>
+              <FormHelperText>「0x」からはじまる42桁の英数字の文字列です</FormHelperText>
               <FormErrorMessage>
                 {errors.walletAddress && errors.walletAddress.message}
               </FormErrorMessage>
@@ -114,7 +127,9 @@ export const Form = () => {
                   required: '必須です',
                 })}
               />
-              <FormHelperText>注意書きが入ります</FormHelperText>
+              <FormHelperText>
+                「リカバリーフレーズ」「シードフレーズ」「ニーモニック」ではありません
+              </FormHelperText>
               <FormErrorMessage>{errors.secretKey && errors.secretKey.message}</FormErrorMessage>
             </FormControl>
 
@@ -157,7 +172,6 @@ export const Form = () => {
                     },
                   })}
                 />
-                <FormHelperText>注意書きが入ります</FormHelperText>
                 <FormErrorMessage>
                   {errors.publicDate && errors.publicDate.message}
                 </FormErrorMessage>
