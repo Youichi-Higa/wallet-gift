@@ -4,4 +4,4 @@ export const paths = {
   confirmation: '/confirmation',
   complete: '/complete',
   choice: '/choice',
-};
+} as const;

@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Checkbox, Divider, Heading, HStack, Text } from '@chakra-ui/react';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from 'src/services/firebase';
 import { BackButton, NextButton } from 'src/components/buttons';
 import { paths } from 'src/const/paths';
+import { formatDate } from 'src/utils/formatDate';
 import type { FormValues } from 'src/types/FormValues';
 
 export const Confirmation = () => {
@@ -15,9 +18,23 @@ export const Confirmation = () => {
   const handleCheckBox = () => setNotesChecked(!notesChecked);
 
   // 「送信」ボタン押下時の処理
-  const onSubmit = () => {
-    navigate(paths.complete);
+  const onSubmit = async () => {
+    // 公開時期がnowの場合、本日の日付（YYYY-MM-DD）を追加
+    if (formValues.publicType === 'now') formValues.publicDate = formatDate(new Date());
+    // 保存不要の公開時期を削除
+    delete formValues.publicType;
+
+    try {
+      // firestoreにデータ保存
+      await addDoc(collection(db, 'wallets'), formValues);
+
+      // 保存後に完了画面に遷移
+      navigate(paths.complete);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
   };
+
   // 「もどる」ボタン押下時の処理
   const goBack = () => navigate(-1);
 
@@ -62,7 +79,7 @@ export const Confirmation = () => {
                 Wallet情報の公開日
               </Text>
               <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={6}>
-                {formValues.publicDate}
+                {formValues.publicDate.replaceAll('-', '/')}
               </Text>
             </>
           )}

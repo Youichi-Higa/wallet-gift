@@ -44,8 +44,6 @@ export const Form = () => {
 
   // 「確認画面へ」ボタン押下時の処理
   const onSubmit = (formValues: FormValues) => {
-    console.log(formValues);
-
     // フォーム入力値を持って、確認画面に遷移
     navigate(paths.confirmation, { state: formValues });
   };

@@ -3,5 +3,5 @@ export type FormValues = {
   walletAddress: string;
   secretKey: string;
   publicDate: string;
-  publicType: string;
+  publicType?: string;
 };
