@@ -13,7 +13,7 @@ export const NextButton = (props: Props) => {
   return (
     <Button
       type="submit"
-      colorScheme="teal"
+      colorScheme="blue"
       sx={{ width: '100%' }}
       onClick={onClick}
       disabled={disabled || isSubmitting}
