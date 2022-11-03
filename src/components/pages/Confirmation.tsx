@@ -13,9 +13,16 @@ export const Confirmation = () => {
 
   const formValues: FormValues = location.state;
 
-  // 注意事項がチェックされているか（boolean）
-  const [isNotesChecked, setIsNotesChecked] = useState<boolean>(false);
-  const handleCheckBox = () => setIsNotesChecked(!isNotesChecked);
+  // 注意事項１がチェックされているか（boolean）
+  const [isNotes1Checked, setIsNotes1Checked] = useState<boolean>(false);
+  const handleCheckBox1 = () => setIsNotes1Checked(!isNotes1Checked);
+
+  // 注意事項２がチェックされているか（boolean）
+  const [isNotes2Checked, setIsNotes2Checked] = useState<boolean>(false);
+  const handleCheckBox2 = () => setIsNotes2Checked(!isNotes2Checked);
+
+  // 注意事項１と２が両方ともチェック（true）されている時のみbuttonDisabledがfalseになり、有効化される
+  const buttonDisabled = !isNotes1Checked || !isNotes2Checked;
 
   // firestoreにデータ送信中か（boolean）
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -114,35 +121,44 @@ export const Confirmation = () => {
 
           <Divider my={8} />
 
-          <Heading as="h2" sx={{ fontSize: '20px' }} color="black" mb={3} noOfLines={1}>
-            {formValues.publicType === 'now'
-              ? 'このWalletはいらないWalletですか？'
-              : 'リスクについて理解しましたか？'}
+          <Heading as="h2" sx={{ fontSize: '20px' }} color="black" mb={2} noOfLines={1}>
+            注意事項
           </Heading>
-          <Text fontSize="md" color="black" mb={3}>
-            {formValues.publicType === 'now'
-              ? 'いますぐWalletの情報が公開されます。必要な資金は移動しておきましょう。'
-              : 'システムの不具合など不測の事態により、公開日よりも早くWallet Addressと秘密鍵が公開される恐れがあります'}
+          <Text fontSize="md" color="black" mb={6}>
+            下記項目を確認し、チェックを入れお進みください
           </Text>
 
+          {/* 注意事項１ */}
           <Box
             bg="red.50"
-            h={16}
             px={4}
             py={5}
-            mb={3}
+            mb={6}
             borderWidth="1px"
             borderColor="red.300"
             borderRadius="lg"
           >
-            <Checkbox color="black" isChecked={isNotesChecked} onChange={handleCheckBox}>
-              リスクについて理解した
+            <Checkbox color="black" isChecked={isNotes1Checked} onChange={handleCheckBox1}>
+              {formValues.publicType === 'now'
+                ? 'いますぐWalletの情報が公開されます。公開するWalletには、不要な資産のみ残してください。'
+                : 'システムの不具合など不測の事態により、公開日より早くWalletAddressと秘密鍵が公開される恐れがあります'}
             </Checkbox>
           </Box>
 
-          <Text fontSize="md" color="gray.700" mb={6}>
-            注意事項を読み、チェックボックスにチェックしてください
-          </Text>
+          {/* 注意事項２ */}
+          <Box
+            bg="red.50"
+            px={4}
+            py={5}
+            mb={6}
+            borderWidth="1px"
+            borderColor="red.300"
+            borderRadius="lg"
+          >
+            <Checkbox color="black" isChecked={isNotes2Checked} onChange={handleCheckBox2}>
+              1度公開したらもとに戻せません。取引の記録を消すこともできません。
+            </Checkbox>
+          </Box>
         </Box>
       </Box>
 
@@ -151,11 +167,15 @@ export const Confirmation = () => {
         <Box w="200px">
           <BackButton buttonText="もどる" onClick={goBack} />
         </Box>
-        <Box w="200px">
+        <Box w="230px">
           <NextButton
-            buttonText="送信"
+            buttonText={
+              formValues.publicType === 'now'
+                ? 'Wallet 情報を公開する'
+                : 'Wallet 情報を公開予約する'
+            }
             onClick={onSubmit}
-            disabled={!isNotesChecked}
+            disabled={buttonDisabled}
             isSubmitting={isSubmitting}
           />
         </Box>
