@@ -14,8 +14,12 @@ export const Confirmation = () => {
 
   const formValues: FormValues = location.state;
 
-  const [notesChecked, setNotesChecked] = useState<boolean>(false);
-  const handleCheckBox = () => setNotesChecked(!notesChecked);
+  // 注意事項がチェックされているか（boolean）
+  const [isNotesChecked, setIsNotesChecked] = useState<boolean>(false);
+  const handleCheckBox = () => setIsNotesChecked(!isNotesChecked);
+
+  // firestoreにデータ送信中か（boolean）
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // 「送信」ボタン押下時の処理
   const onSubmit = async () => {
@@ -25,6 +29,8 @@ export const Confirmation = () => {
     delete formValues.publicType;
 
     try {
+      setIsSubmitting(true);
+
       // firestoreにデータ保存
       await addDoc(collection(db, 'wallets'), formValues);
 
@@ -32,6 +38,8 @@ export const Confirmation = () => {
       navigate(paths.complete);
     } catch (e) {
       console.error('Error adding document: ', e);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,7 +122,7 @@ export const Confirmation = () => {
             borderColor="red.300"
             borderRadius="lg"
           >
-            <Checkbox color="black" isChecked={notesChecked} onChange={handleCheckBox}>
+            <Checkbox color="black" isChecked={isNotesChecked} onChange={handleCheckBox}>
               リスクについて理解した
             </Checkbox>
           </Box>
@@ -131,7 +139,12 @@ export const Confirmation = () => {
           <BackButton buttonText="もどる" onClick={goBack} />
         </Box>
         <Box w="200px">
-          <NextButton buttonText="送信" onClick={onSubmit} disabled={!notesChecked} />
+          <NextButton
+            buttonText="送信"
+            onClick={onSubmit}
+            disabled={!isNotesChecked}
+            isSubmitting={isSubmitting}
+          />
         </Box>
       </HStack>
     </Box>
