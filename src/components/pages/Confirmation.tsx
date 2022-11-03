@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Checkbox, Divider, Heading, HStack, Text } from '@chakra-ui/react';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from 'src/services/firebase';
+import { db } from 'src/services';
 import { BackButton, NextButton } from 'src/components/buttons';
-import { paths } from 'src/const/paths';
-import { formatDate } from 'src/utils/formatDate';
-import type { FormValues } from 'src/types/FormValues';
+import { paths } from 'src/const';
+import { formatDate } from 'src/utils';
+import type { FormValues } from 'src/types';
 
 export const Confirmation = () => {
   const location = useLocation();
@@ -71,6 +71,13 @@ export const Confirmation = () => {
           </Text>
           <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
             {formValues.secretKey}
+          </Text>
+
+          <Text fontSize="md" color="gray.700">
+            受取人へのメッセージ
+          </Text>
+          <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
+            {formValues.messageToRecipient}
           </Text>
 
           {formValues.publicType === 'future' && (

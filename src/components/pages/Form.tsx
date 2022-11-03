@@ -15,9 +15,10 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
+import { AutoResizeTextarea } from 'src/components';
 import { BackButton, NextButton } from 'src/components/buttons';
-import { paths } from 'src/const/paths';
-import type { FormValues } from 'src/types/FormValues';
+import { paths } from 'src/const';
+import type { FormValues } from 'src/types';
 
 export const Form = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export const Form = () => {
             </Text>
 
             {/* ネットワーク入力欄 */}
-            <FormControl mb={6} isInvalid={typeof errors?.network?.message === 'string'}>
+            <FormControl mb={6} isInvalid={errors?.network !== undefined}>
               <FormLabel htmlFor="network" color="gray.700">
                 NetWork
               </FormLabel>
@@ -87,11 +88,11 @@ export const Form = () => {
                   </option>
                 ))}
               </Select>
-              <FormErrorMessage> {errors.network && errors.network.message}</FormErrorMessage>
+              <FormErrorMessage> {errors?.network?.message}</FormErrorMessage>
             </FormControl>
 
             {/* ウォレットアドレス入力欄 */}
-            <FormControl mb={6} isInvalid={typeof errors?.walletAddress?.message === 'string'}>
+            <FormControl mb={6} isInvalid={errors?.walletAddress !== undefined}>
               <FormLabel htmlFor="walletAddress" color="gray.700">
                 Wallet address
               </FormLabel>
@@ -116,13 +117,11 @@ export const Form = () => {
                 })}
               />
               <FormHelperText>「0x」からはじまる42桁の英数字の文字列です</FormHelperText>
-              <FormErrorMessage>
-                {errors.walletAddress && errors.walletAddress.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors?.walletAddress?.message}</FormErrorMessage>
             </FormControl>
 
             {/* 秘密鍵入力欄 */}
-            <FormControl mb={6} isInvalid={typeof errors?.secretKey?.message === 'string'}>
+            <FormControl mb={6} isInvalid={errors?.secretKey !== undefined}>
               <FormLabel htmlFor="secretKey" color="gray.700">
                 秘密鍵
               </FormLabel>
@@ -137,7 +136,27 @@ export const Form = () => {
               <FormHelperText>
                 「リカバリーフレーズ」「シードフレーズ」「ニーモニック」ではありません
               </FormHelperText>
-              <FormErrorMessage>{errors.secretKey && errors.secretKey.message}</FormErrorMessage>
+              <FormErrorMessage>{errors?.secretKey?.message}</FormErrorMessage>
+            </FormControl>
+
+            {/* メッセージ入力欄 */}
+            <FormControl mb={6} isInvalid={errors?.messageToRecipient !== undefined}>
+              <FormLabel htmlFor="messageToRecipient" color="gray.700">
+                受取人へのメッセージ
+              </FormLabel>
+              <AutoResizeTextarea
+                id="messageToRecipient"
+                resize="none"
+                {...register('messageToRecipient', {
+                  required: '必須です',
+                  maxLength: {
+                    value: 140,
+                    message: '140文字を超えています',
+                  },
+                })}
+              />
+              <FormHelperText>140文字以内で入力してください</FormHelperText>
+              <FormErrorMessage>{errors?.messageToRecipient?.message}</FormErrorMessage>
             </FormControl>
 
             <Divider mb={6} />
@@ -165,7 +184,7 @@ export const Form = () => {
 
             {/* 未来日の設定 */}
             {isFuture && (
-              <FormControl isInvalid={typeof errors?.publicDate?.message === 'string'}>
+              <FormControl isInvalid={errors?.publicDate !== undefined}>
                 <FormLabel htmlFor="publicDate" color="gray.700">
                   Wallet情報の公開日
                 </FormLabel>
@@ -182,7 +201,7 @@ export const Form = () => {
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.publicDate && errors.publicDate.message}
+                  {errors?.publicDate?.message}
                 </FormErrorMessage>
               </FormControl>
             )}

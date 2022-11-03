@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import { Choice, Complete, Confirmation, Form, Top } from 'src/components/pages';
-import { paths } from 'src/const/paths';
+import { paths } from 'src/const';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
