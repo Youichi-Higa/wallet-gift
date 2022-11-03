@@ -37,19 +37,19 @@ export const Form = () => {
     'セポリア　テストネットワーク',
   ];
 
-  // 「未来日で公開する」が選択されているか(boolean)
+  /** 「未来日で公開する」が選択されているか(boolean) */
   const isFuture = watch('publicType') === 'future';
 
-  // 未来日が選択されているか(boolean)
-  const isFutureDate = (date: string) => new Date(date) > new Date();
+  /** 未来日が選択されているか(boolean) */
+  const isFutureDate = (date: Date | string) => new Date(date) > new Date();
 
-  // 「確認画面へ」ボタン押下時の処理
+  /** 「確認画面へ」ボタン押下時の処理 */
   const onSubmit = (formValues: FormValues) => {
     // フォーム入力値を持って、確認画面に遷移
     navigate(paths.confirmation, { state: formValues });
   };
 
-  // 「もどる」ボタン押下時の処理
+  /** 「もどる」ボタン押下時に前のページに戻る */
   const goBack = () => navigate(-1);
 
   return (
@@ -142,11 +142,12 @@ export const Form = () => {
             {/* メッセージ入力欄 */}
             <FormControl mb={6} isInvalid={errors?.messageToRecipient !== undefined}>
               <FormLabel htmlFor="messageToRecipient" color="gray.700">
-                受取人へのメッセージ
+                メッセージ（140字まで）
               </FormLabel>
               <AutoResizeTextarea
                 id="messageToRecipient"
                 resize="none"
+                placeholder="Cryptoの世界へようこそ！"
                 {...register('messageToRecipient', {
                   required: '必須です',
                   maxLength: {
@@ -155,7 +156,9 @@ export const Form = () => {
                   },
                 })}
               />
-              <FormHelperText>140文字以内で入力してください</FormHelperText>
+              <FormHelperText>
+                Walletをひろった人へのメッセージです。おすすめのDappsなど記入してみてください
+              </FormHelperText>
               <FormErrorMessage>{errors?.messageToRecipient?.message}</FormErrorMessage>
             </FormControl>
 
@@ -165,7 +168,7 @@ export const Form = () => {
               公開日の設定
             </Heading>
             <Text fontSize="md" color="black" mb={6}>
-              Wallet情報を公開する日付を設定してください。
+              Wallet情報を公開する日付を設定してください
             </Text>
 
             {/* 公開時期の選択 */}
@@ -191,7 +194,6 @@ export const Form = () => {
                 <Input
                   id="publicDate"
                   type="date"
-                  size="md"
                   {...register('publicDate', {
                     required: '必須です',
                     validate: {
@@ -200,9 +202,7 @@ export const Form = () => {
                     },
                   })}
                 />
-                <FormErrorMessage>
-                  {errors?.publicDate?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors?.publicDate?.message}</FormErrorMessage>
               </FormControl>
             )}
           </Box>
