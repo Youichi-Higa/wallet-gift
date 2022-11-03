@@ -5,7 +5,6 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from 'src/services';
 import { BackButton, NextButton } from 'src/components/buttons';
 import { paths } from 'src/const';
-import { formatDate } from 'src/utils';
 import type { FormValues } from 'src/types';
 
 export const Confirmation = () => {
@@ -21,14 +20,15 @@ export const Confirmation = () => {
   // firestoreにデータ送信中か（boolean）
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // 「送信」ボタン押下時の処理
+  /** 「送信」ボタン押下時の処理 */
   const onSubmit = async () => {
-    // 公開時期がnowの場合、本日の日付（YYYY-MM-DD）を追加
-    if (formValues.publicType === 'now') formValues.publicDate = formatDate(new Date());
-    // 保存不要の公開時期を削除
-    delete formValues.publicType;
+    // 公開時期がnowの場合、本日のDateオブジェクトを追加
+    if (formValues.publicType === 'now') formValues.publicDate = new Date();
+    // 公開時期がfutureの場合、YYYY-MM-DDの文字列をDateオブジェクトに変換
+    if (formValues.publicType === 'future') formValues.publicDate = new Date(formValues.publicDate);
 
     try {
+      // 「送信」ボタンのローディング開始
       setIsSubmitting(true);
 
       // firestoreにデータ保存
@@ -39,12 +39,25 @@ export const Confirmation = () => {
     } catch (e) {
       console.error('Error adding document: ', e);
     } finally {
+      // 「送信」ボタンのローディング終了
       setIsSubmitting(false);
     }
   };
 
-  // 「もどる」ボタン押下時の処理
+  /** 「もどる」ボタン押下時に前のページに戻る */
   const goBack = () => navigate(-1);
+
+  /** YYYY-MM-DDの文字列 又は DateオブジェクトをYYYY/MM/DDの文字列に変換する関数 */
+  const formatDate = (date: Date | string) => {
+    // 文字列の場合
+    if (typeof date === 'string') return date.replaceAll('-', '/');
+
+    // Dateオブジェクトの場合
+    const y = date.getFullYear();
+    const m = ('00' + (date.getMonth() + 1)).slice(-2);
+    const d = ('00' + date.getDate()).slice(-2);
+    return y + '/' + m + '/' + d;
+  };
 
   return (
     <Box w="700px" mx="auto" py={10}>
@@ -94,7 +107,7 @@ export const Confirmation = () => {
                 Wallet情報の公開日
               </Text>
               <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={6}>
-                {formValues.publicDate.replaceAll('-', '/')}
+                {formatDate(formValues.publicDate)}
               </Text>
             </>
           )}

@@ -5,7 +5,9 @@ import { paths } from 'src/const';
 
 export const Complete = () => {
   const navigate = useNavigate();
-  const GoToTop = () => navigate(paths.top);
+
+  /** トップページに遷移 */
+  const GoToTopPage = () => navigate(paths.top);
 
   return (
     <Flex w="700px" mx="auto" py={10} direction="column" justify="center" align="center">
@@ -20,7 +22,7 @@ export const Complete = () => {
       />
 
       <Box w="200px" mt={16}>
-        <NextButton buttonText="Topに戻る" onClick={GoToTop} />
+        <NextButton buttonText="Topに戻る" onClick={GoToTopPage} />
       </Box>
     </Flex>
   );
