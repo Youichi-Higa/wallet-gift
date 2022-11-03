@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { NextButton } from 'src/components/buttons';
-import { paths } from 'src/const/paths';
+import { paths } from 'src/const';
 
 export const Complete = () => {
   const navigate = useNavigate();
