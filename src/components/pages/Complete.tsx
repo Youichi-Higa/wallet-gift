@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex, Image } from '@chakra-ui/react';
 import { NextButton } from 'src/components/buttons';
-import { paths } from 'src/const';
+import { images, paths } from 'src/assets';
 
 export const Complete = () => {
   const navigate = useNavigate();
@@ -10,20 +10,21 @@ export const Complete = () => {
   const GoToTopPage = () => navigate(paths.top);
 
   return (
-    <Flex w="700px" mx="auto" py={10} direction="column" justify="center" align="center">
-      {/* タイトル */}
-      <Heading as="h1" sx={{ fontSize: '32px' }} mb={12} noOfLines={1}>
-        Walletをあげる
-      </Heading>
+    <Flex justify="space-between">
+      {/* 左側のフォームエリア */}
+      <Flex w="700px" ml="100" my={20} direction="column" justify="center" align="center">
+        {/* 進捗状況の画像 */}
+        <Image src={images.step3} alt="step1" w="100%" mb={16} />
 
-      <img
-        src={`${process.env.PUBLIC_URL}/complete.png`}
-        alt="ありがとうございます！Wallet情報が送信されました"
-      />
+        <img src={images.complete} alt="ありがとうございます！Wallet情報が送信されました" />
 
-      <Box w="200px" mt={16}>
-        <NextButton buttonText="Topに戻る" onClick={GoToTopPage} />
-      </Box>
+        <Box w="200px" mt={16}>
+          <NextButton buttonText="Topに戻る" onClick={GoToTopPage} />
+        </Box>
+      </Flex>
+
+      {/* 右側の画像 */}
+      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" />
     </Flex>
   );
 };

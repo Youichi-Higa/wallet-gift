@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Checkbox, Divider, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Divider, Flex, Heading, Image, HStack, Text } from '@chakra-ui/react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from 'src/services';
 import { BackButton, NextButton } from 'src/components/buttons';
-import { paths } from 'src/const';
+import {images, paths } from 'src/assets';
 import type { FormValues } from 'src/types';
 
 export const Confirmation = () => {
@@ -67,119 +67,123 @@ export const Confirmation = () => {
   };
 
   return (
-    <Box w="700px" mx="auto" py={10}>
-      {/* タイトル */}
-      <Heading as="h1" sx={{ fontSize: '32px' }} mb={12} noOfLines={1} textAlign="center">
-        Walletをあげる
-      </Heading>
+    <Flex justify="space-between">
+      {/* 左側の確認表示エリア */}
+      <Box w="700px" ml="100" my={20}>
+        {/* 進捗状況の画像 */}
+        <Image src={images.step2} alt="step1" w="100%" mb={16} />
 
-      {/* グレーのエリア */}
-      <Box bg="gray.50" mb={12} borderRadius={10}>
-        <Box py="40px" px="50px">
-          <Heading as="h2" sx={{ fontSize: '24px' }} mb={8} noOfLines={1}>
-            入力内容の確認
-          </Heading>
+        {/* グレーのエリア */}
+        <Box bg="gray.50" mb={16} borderRadius={10}>
+          <Box py={10} px={12}>
+            <Heading as="h2" sx={{ fontSize: '24px' }} mb={8} noOfLines={1}>
+              入力内容の確認
+            </Heading>
 
-          <Text fontSize="md" color="gray.700">
-            NetWork
-          </Text>
-          <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
-            {formValues.network}
-          </Text>
+            <Text fontSize="md" color="gray.700">
+              NetWork
+            </Text>
+            <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
+              {formValues.network}
+            </Text>
 
-          <Text fontSize="md" color="gray.700">
-            Wallet address
-          </Text>
-          <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
-            {formValues.walletAddress}
-          </Text>
+            <Text fontSize="md" color="gray.700">
+              Wallet address
+            </Text>
+            <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
+              {formValues.walletAddress}
+            </Text>
 
-          <Text fontSize="md" color="gray.700">
-            秘密鍵
-          </Text>
-          <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
-            {formValues.secretKey}
-          </Text>
+            <Text fontSize="md" color="gray.700">
+              秘密鍵
+            </Text>
+            <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
+              {formValues.secretKey}
+            </Text>
 
-          <Text fontSize="md" color="gray.700">
-            受取人へのメッセージ
-          </Text>
-          <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
-            {formValues.messageToRecipient}
-          </Text>
+            <Text fontSize="md" color="gray.700">
+              受取人へのメッセージ
+            </Text>
+            <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={4}>
+              {formValues.messageToRecipient}
+            </Text>
 
-          {formValues.publicType === 'future' && (
-            <>
-              <Text fontSize="md" color="gray.700">
-                Wallet情報の公開日
-              </Text>
-              <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={6}>
-                {formatDate(formValues.publicDate)}
-              </Text>
-            </>
-          )}
+            {formValues.publicType === 'future' && (
+              <>
+                <Text fontSize="md" color="gray.700">
+                  Wallet情報の公開日
+                </Text>
+                <Text fontSize="md" color="black" sx={{ fontWeight: '700' }} mb={12}>
+                  {formatDate(formValues.publicDate)}
+                </Text>
+              </>
+            )}
 
-          <Divider my={8} />
+            <Divider my={12} />
 
-          <Heading as="h2" sx={{ fontSize: '20px' }} color="black" mb={2} noOfLines={1}>
-            注意事項
-          </Heading>
-          <Text fontSize="md" color="black" mb={6}>
-            下記項目を確認し、チェックを入れお進みください
-          </Text>
+            <Heading as="h2" sx={{ fontSize: '24px' }} color="black" mb={2} noOfLines={1}>
+              注意事項
+            </Heading>
+            <Text fontSize="md" color="black" mb={6}>
+              下記項目を確認し、チェックを入れお進みください
+            </Text>
 
-          {/* 注意事項１ */}
-          <Box
-            bg="red.50"
-            px={4}
-            py={5}
-            mb={6}
-            borderWidth="1px"
-            borderColor="red.300"
-            borderRadius="lg"
-          >
-            <Checkbox color="black" isChecked={isNotes1Checked} onChange={handleCheckBox1}>
-              {formValues.publicType === 'now'
-                ? 'いますぐWalletの情報が公開されます。公開するWalletには、不要な資産のみ残してください。'
-                : 'システムの不具合など不測の事態により、公開日より早くWalletAddressと秘密鍵が公開される恐れがあります'}
-            </Checkbox>
-          </Box>
+            {/* 注意事項１ */}
+            <Box
+              bg="red.50"
+              px={4}
+              py={5}
+              mb={6}
+              borderWidth="1px"
+              borderColor="red.300"
+              borderRadius="lg"
+            >
+              <Checkbox color="black" isChecked={isNotes1Checked} onChange={handleCheckBox1}>
+                {formValues.publicType === 'now'
+                  ? 'いますぐWalletの情報が公開されます。公開するWalletには、不要な資産のみ残してください。'
+                  : 'システムの不具合など不測の事態により、公開日より早くWalletAddressと秘密鍵が公開される恐れがあります'}
+              </Checkbox>
+            </Box>
 
-          {/* 注意事項２ */}
-          <Box
-            bg="red.50"
-            px={4}
-            py={5}
-            mb={6}
-            borderWidth="1px"
-            borderColor="red.300"
-            borderRadius="lg"
-          >
-            <Checkbox color="black" isChecked={isNotes2Checked} onChange={handleCheckBox2}>
-              1度公開したらもとに戻せません。取引の記録を消すこともできません。
-            </Checkbox>
+            {/* 注意事項２ */}
+            <Box
+              bg="red.50"
+              px={4}
+              py={5}
+              mb={6}
+              borderWidth="1px"
+              borderColor="red.300"
+              borderRadius="lg"
+            >
+              <Checkbox color="black" isChecked={isNotes2Checked} onChange={handleCheckBox2}>
+                1度公開したらもとに戻せません。取引の記録を消すこともできません。
+              </Checkbox>
+            </Box>
           </Box>
         </Box>
+
+        {/* ボタン */}
+        <HStack spacing="12px" justify="center">
+          <Box w="200px">
+            <BackButton buttonText="もどる" onClick={goBack} />
+          </Box>
+          <Box w="230px">
+            <NextButton
+              buttonText={
+                formValues.publicType === 'now'
+                  ? 'Wallet 情報を公開する'
+                  : 'Wallet 情報を公開予約する'
+              }
+              onClick={onSubmit}
+              disabled={buttonDisabled}
+              isSubmitting={isSubmitting}
+            />
+          </Box>
+        </HStack>
       </Box>
 
-      {/* ボタン */}
-      <HStack spacing="12px" justify="center">
-        <Box w="200px">
-          <BackButton buttonText="もどる" onClick={goBack} />
-        </Box>
-        <Box w="230px">
-          <NextButton
-            buttonText={
-              formValues.publicType === 'now'
-                ? 'Wallet 情報を公開する'
-                : 'Wallet 情報を公開予約する'
-            }
-            onClick={onSubmit}
-            disabled={buttonDisabled}
-            isSubmitting={isSubmitting}
-          />
-        </Box>
-      </HStack>
-    </Box>
+      {/* 右側の画像 */}
+      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" />
+    </Flex>
   );
 };
