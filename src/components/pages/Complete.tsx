@@ -24,7 +24,7 @@ export const Complete = () => {
       </Flex>
 
       {/* 右側の画像 */}
-      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" />
+      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" position="sticky" top="0"/>
     </Flex>
   );
 };
