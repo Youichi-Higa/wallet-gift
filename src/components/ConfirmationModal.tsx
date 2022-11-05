@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -24,13 +25,27 @@ export const ConfirmationModal = (props: Props) => {
 
   const navigate = useNavigate();
 
-  const getWallet = () => {
-    if (wallet === undefined) return;
-    // もらったwalletのデータ削除
-    deleteDoc(doc(db, "wallets", wallet.id))
+  // firestoreに削除データ送信中か（boolean）
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    // walletのデータを持って、完了画面に遷移
-    navigate(paths.receipt, { state: wallet });
+  const getWallet = async () => {
+    if (wallet === undefined) return;
+
+    try {
+      // 「Wallet情報を見る」ボタンのローディング開始
+      setIsSubmitting(true);
+
+      // もらったwalletのfirestoreのデータを削除
+      await deleteDoc(doc(db, 'wallets', wallet.id));
+
+      // walletのデータを持って、完了画面に遷移
+      navigate(paths.receipt, { state: wallet });
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    } finally {
+      // 「Wallet情報を見る」ボタンのローディング終了
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -44,7 +59,14 @@ export const ConfirmationModal = (props: Props) => {
           <Button colorScheme="gray" mr={3} onClick={onClose}>
             選び直す
           </Button>
-          <Button colorScheme="blue" onClick={getWallet} >Wallet情報を見る</Button>
+          <Button
+            colorScheme="blue"
+            onClick={getWallet}
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            Wallet情報を見る
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
