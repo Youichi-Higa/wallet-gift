@@ -1,4 +1,5 @@
-export type FormValues = {
+export type Wallet = {
+  id: string;
   network: string;
   walletAddress: string;
   secretKey: string;

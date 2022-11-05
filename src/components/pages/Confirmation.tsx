@@ -4,14 +4,14 @@ import { Box, Checkbox, Divider, Flex, Heading, Image, HStack, Text } from '@cha
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from 'src/services';
 import { BackButton, NextButton } from 'src/components/buttons';
-import {images, paths } from 'src/assets';
-import type { FormValues } from 'src/types';
+import { images, paths } from 'src/assets';
+import type { Wallet } from 'src/types';
 
 export const Confirmation = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const formValues: FormValues = location.state;
+  const formValues: Wallet = location.state;
 
   // 注意事項１がチェックされているか（boolean）
   const [isNotes1Checked, setIsNotes1Checked] = useState<boolean>(false);
@@ -183,7 +183,7 @@ export const Confirmation = () => {
       </Box>
 
       {/* 右側の画像 */}
-      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" position="sticky" top="0"/>
+      <Image src={images.giveWallet} alt="Walletをあげる" h="100vh" position="sticky" top="0" />
     </Flex>
   );
 };

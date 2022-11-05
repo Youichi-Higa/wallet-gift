@@ -2,10 +2,11 @@ import { Box, Text } from '@chakra-ui/react';
 
 type Props = {
   message: string;
+  onConfirmationModalOpen: () => void;
 };
 
 export const MessageCard = (props: Props) => {
-  const { message } = props;
+  const { message, onConfirmationModalOpen } = props;
 
   return (
     <Box
@@ -15,6 +16,7 @@ export const MessageCard = (props: Props) => {
       p={7}
       borderRadius="3xl"
       sx={{ cursor: 'pointer' }}
+      onClick={onConfirmationModalOpen}
     >
       <Text>{message}</Text>
     </Box>

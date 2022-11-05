@@ -20,7 +20,7 @@ import {
 import { AutoResizeTextarea } from 'src/components';
 import { BackButton, NextButton } from 'src/components/buttons';
 import { images, paths } from 'src/assets';
-import type { FormValues } from 'src/types';
+import type { Wallet } from 'src/types';
 
 export const Form = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const Form = () => {
     register,
     watch,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<Wallet>();
 
   // ネットワークの選択肢
   const networks = [
@@ -46,7 +46,7 @@ export const Form = () => {
   const isFutureDate = (date: Date | string) => new Date(date) > new Date();
 
   /** 「確認画面へ」ボタン押下時の処理 */
-  const onSubmit = (formValues: FormValues) => {
+  const onSubmit = (formValues: Wallet) => {
     // フォーム入力値を持って、確認画面に遷移
     navigate(paths.confirmation, { state: formValues });
   };
