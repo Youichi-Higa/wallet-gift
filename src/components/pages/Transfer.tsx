@@ -3,7 +3,7 @@ import { Box, Flex, Image } from '@chakra-ui/react';
 import { NextButton } from 'src/components/buttons';
 import { images, paths } from 'src/assets';
 
-export const Complete = () => {
+export const Transfer = () => {
   const navigate = useNavigate();
 
   /** トップページに遷移 */

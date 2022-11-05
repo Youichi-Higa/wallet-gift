@@ -77,7 +77,11 @@ export const Top = () => {
       </VStack>
 
       {/* 確認モーダル */}
-      <ConfirmationModal isOpen={isConfirmationModalOpen} onClose={closeConfirmationModal} />
+      <ConfirmationModal
+        wallet={selectedWallet}
+        isOpen={isConfirmationModalOpen}
+        onClose={closeConfirmationModal}
+      />
     </Flex>
   );
 };

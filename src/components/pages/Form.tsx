@@ -63,7 +63,7 @@ export const Form = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* グレーのフォーム入力エリア */}
-          <Box bg="gray.50" mb={16} borderRadius={10}>
+          <Box bg="gray.50" mb={16} borderRadius={20}>
             <Box py={10} px={12}>
               <Heading as="h2" sx={{ fontSize: '24px' }} mb={2} noOfLines={1}>
                 Wallet情報の入力
