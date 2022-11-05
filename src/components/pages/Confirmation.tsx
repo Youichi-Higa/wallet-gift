@@ -42,7 +42,7 @@ export const Confirmation = () => {
       await addDoc(collection(db, 'wallets'), formValues);
 
       // 保存後に完了画面に遷移
-      navigate(paths.complete);
+      navigate(paths.transfer);
     } catch (e) {
       console.error('Error adding document: ', e);
     } finally {
@@ -74,7 +74,7 @@ export const Confirmation = () => {
         <Image src={images.step2} alt="step1" w="100%" mb={16} />
 
         {/* グレーのエリア */}
-        <Box bg="gray.50" mb={16} borderRadius={10}>
+        <Box bg="gray.50" mb={16} borderRadius={20}>
           <Box py={10} px={12}>
             <Heading as="h2" sx={{ fontSize: '24px' }} mb={8} noOfLines={1}>
               入力内容の確認

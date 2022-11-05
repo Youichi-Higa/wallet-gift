@@ -2,5 +2,6 @@ export const paths = {
   top: '/',
   form: '/form',
   confirmation: '/confirmation',
-  complete: '/complete',
+  transfer: '/transfer',
+  receipt: '/receipt',
 } as const;
