@@ -1,9 +1,45 @@
+import { useEffect, useState } from 'react';
 import { Box, Flex, Image, Link, Text, VStack } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import { MessageCard } from 'src/components';
+import { collection, getDocs } from 'firebase/firestore';
+import { ConfirmationModal, MessageCard } from 'src/components';
 import { images, paths } from 'src/assets';
+import { db } from 'src/services';
+import type { Wallet } from 'src/types';
 
 export const Top = () => {
+  // firestoreから取得したwalletsのデータ
+  const [wallets, setWallets] = useState<Wallet[]>([]);
+  // ユーザーに選択されたwallet
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>();
+  // 確認モーダル開閉のフラグ
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+
+  /** メッセージをクリックしてwalletを選択する関数 */
+  const selectWallet = (wallet: Wallet) => {
+    setSelectedWallet(wallet);
+    setIsConfirmationModalOpen(true);
+  };
+
+  /** 確認モーダルを閉じる関数 */
+  const closeConfirmationModal = () => setIsConfirmationModalOpen(false);
+
+  /** firestoreからデータ取得する関数 */
+  const getWalletsDocs = async () => {
+    const q = collection(db, 'wallets');
+    const querySnapshot = await getDocs(q);
+    const walletsDocs: Wallet[] = [];
+    querySnapshot.docs.forEach((doc) => {
+      const data = doc.data() as Omit<Wallet, 'id'>;
+      walletsDocs.push({ id: doc.id, ...data });
+    });
+    setWallets(walletsDocs);
+  };
+
+  useEffect(() => {
+    getWalletsDocs();
+  }, []);
+
   return (
     <Flex justify="space-between">
       {/* 左側の画像エリア */}
@@ -31,17 +67,17 @@ export const Top = () => {
 
       {/* 右側のメッセージ表示エリア */}
       <VStack w="70%" spacing="32px" p={20}>
-        <MessageCard message="Cryptoの世界へようこそ！" />
-        <MessageCard message="吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれ" />
-        <MessageCard message="恥の多い生涯を送って来ました。自分には、人間の生活というものが、見当つかないのです。自分は東北の田舎" />
-        <MessageCard message="ワリなガャぢヰあヘゥマでテんでンボマヮホごごナネヤナジプヂてょびュゎそべっさホろせムザデらダゐポヰおかやまホイモヹマッょにヒわさばそぐかィさばびゃづほにあなテむぜブちイやらどロそっばふとゼびほゃぬたろポィょねまぎよふナヲけやけわとヷこェくぼぅサぐろせケヶでッゅらザおめハてドラペズ" />
-        <MessageCard message="吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれ" />
-        <MessageCard message="Cryptoの世界へようこそ！" />
-        <MessageCard message="吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれ" />
-        <MessageCard message="恥の多い生涯を送って来ました。自分には、人間の生活というものが、見当つかないのです。自分は東北の田舎" />
-        <MessageCard message="ワリなガャぢヰあヘゥマでテんでンボマヮホごごナネヤナジプヂてょびュゎそべっさホろせムザデらダゐポヰおかやまホイモヹマッょにヒわさばそぐかィさばびゃづほにあなテむぜブちイやらどロそっばふとゼびほゃぬたろポィょねまぎよふナヲけやけわとヷこェくぼぅサぐろせケヶでッゅらザおめハてドラペズ" />
-        <MessageCard message="吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれ" />
+        {wallets.map((wallet) => (
+          <MessageCard
+            key={wallet.id}
+            message={wallet.messageToRecipient}
+            onConfirmationModalOpen={() => selectWallet(wallet)}
+          />
+        ))}
       </VStack>
+
+      {/* 確認モーダル */}
+      <ConfirmationModal isOpen={isConfirmationModalOpen} onClose={closeConfirmationModal} />
     </Flex>
   );
 };

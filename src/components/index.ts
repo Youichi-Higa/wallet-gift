@@ -1,2 +1,3 @@
-export * from "./AutoResizeTextarea"
-export * from "./MessageCard"
+export * from './AutoResizeTextarea';
+export * from './ConfirmationModal';
+export * from './MessageCard';
