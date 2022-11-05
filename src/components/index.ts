@@ -1,2 +1,2 @@
 export * from "./AutoResizeTextarea"
-export * from "./Card"
+export * from "./MessageCard"

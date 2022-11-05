@@ -3,5 +3,4 @@ export const paths = {
   form: '/form',
   confirmation: '/confirmation',
   complete: '/complete',
-  choice: '/choice',
 } as const;
