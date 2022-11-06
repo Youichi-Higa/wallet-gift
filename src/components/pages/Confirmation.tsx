@@ -5,6 +5,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from 'src/services';
 import { BackButton, NextButton } from 'src/components/buttons';
 import { images, paths } from 'src/assets';
+import { formatDate } from "src/utils"
 import type { Wallet } from 'src/types';
 
 export const Confirmation = () => {
@@ -30,9 +31,17 @@ export const Confirmation = () => {
   /** 「送信」ボタン押下時の処理 */
   const onSubmit = async () => {
     // 公開時期がnowの場合、本日のDateオブジェクトを追加
-    if (formValues.publicType === 'now') formValues.publicDate = new Date();
-    // 公開時期がfutureの場合、YYYY-MM-DDの文字列をDateオブジェクトに変換
-    if (formValues.publicType === 'future') formValues.publicDate = new Date(formValues.publicDate);
+    if (formValues.publicType === 'now') {
+      // formatDate(new Date())により、本日のYYYY/MM/DDの文字列を取得
+      // new Date("YYYY/MM/DD")により、本日 00:00のDateオブジェクトを取得
+      formValues.publicDate = new Date(formatDate(new Date()));
+    }
+    // 公開時期がfutureの場合、YYYY-MM-DDの文字列を当該日のDateオブジェクトに変換
+    else if (formValues.publicType === 'future') {
+      // フォームから取得した日付はYYYY-MM-DDの文字列となっており、そのままnew Date()に渡すと09:00となってしまうので、
+      // formatDateによりYYYY/MM/DDの文字列に変換して00:00のDateオブジェクトを取得
+      formValues.publicDate = new Date(formatDate(formValues.publicDate));
+    }
 
     try {
       // 「送信」ボタンのローディング開始
@@ -53,18 +62,6 @@ export const Confirmation = () => {
 
   /** 「もどる」ボタン押下時に前のページに戻る */
   const goBack = () => navigate(-1);
-
-  /** YYYY-MM-DDの文字列 又は DateオブジェクトをYYYY/MM/DDの文字列に変換する関数 */
-  const formatDate = (date: Date | string) => {
-    // 文字列の場合
-    if (typeof date === 'string') return date.replaceAll('-', '/');
-
-    // Dateオブジェクトの場合
-    const y = date.getFullYear();
-    const m = ('00' + (date.getMonth() + 1)).slice(-2);
-    const d = ('00' + date.getDate()).slice(-2);
-    return y + '/' + m + '/' + d;
-  };
 
   return (
     <Flex justify="space-between">

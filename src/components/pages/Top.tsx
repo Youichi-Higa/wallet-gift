@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Flex, Image, Link, Text, VStack } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { ConfirmationModal, MessageCard } from 'src/components';
 import { images, paths } from 'src/assets';
 import { db } from 'src/services';
@@ -26,8 +26,12 @@ export const Top = () => {
 
   /** firestoreからデータ取得する関数 */
   const getWalletsDocs = async () => {
-    const q = collection(db, 'wallets');
+    // 公開日が本日以前に設定されているwalletデータを取得するクエリ
+    const q = query(collection(db, 'wallets'), where('publicDate', '<=', new Date()));
+    // firestoreからデータ取得
     const querySnapshot = await getDocs(q);
+
+    // 取得したquerySnapshotをループしてwalletsDocsに一時保存し、完了後にwalletsに保存
     const walletsDocs: Wallet[] = [];
     querySnapshot.docs.forEach((doc) => {
       const data = doc.data() as Omit<Wallet, 'id'>;
@@ -36,6 +40,7 @@ export const Top = () => {
     setWallets(walletsDocs);
   };
 
+  // 初回レンダリング時にfirestoreからデータ取得
   useEffect(() => {
     getWalletsDocs();
   }, []);

@@ -17,9 +17,10 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
+import { images, paths } from 'src/assets';
 import { AutoResizeTextarea } from 'src/components';
 import { BackButton, NextButton } from 'src/components/buttons';
-import { images, paths } from 'src/assets';
+import { formatDate } from 'src/utils';
 import type { Wallet } from 'src/types';
 
 export const Form = () => {
@@ -43,7 +44,12 @@ export const Form = () => {
   const isFuture = watch('publicType') === 'future';
 
   /** 未来日が選択されているか(boolean) */
-  const isFutureDate = (date: Date | string) => new Date(date) > new Date();
+  const isFutureDate = (date: Date | string) => {
+    // フォームから取得した日付はYYYY-MM-DDの文字列となっており、そのままnew Date()に渡すと09:00となってしまうので、
+    // formatDateによりYYYY/MM/DDの文字列に変換して00:00のDateオブジェクトを取得
+    // 左辺の現時点のDateオブジェクトと比較し、未来日かどうかを判定
+    return new Date() < new Date(formatDate(date));
+  };
 
   /** 「確認画面へ」ボタン押下時の処理 */
   const onSubmit = (formValues: Wallet) => {
